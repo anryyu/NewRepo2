@@ -33,6 +33,9 @@
 @section Scripts {
     <script>
         (async () => {
+            const name = document.querySelector('#userName');
+            const email = document.querySelector('#UserEmail');
+            const age = document.querySelector('#userAge');
             const url = '@Url.Content("~/api/checkaccountaction")?name=Tom&age=30&email=Tom@company.com';
             const response = await fetch(url);
             const data = await response.text();

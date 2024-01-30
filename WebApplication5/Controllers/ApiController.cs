@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Versioning;
 using System.Text;
 using WebApplication5.Models;
 
@@ -24,8 +25,9 @@ namespace WebApplication5.Controllers
             }
             return Content($"Hello {name}, {age}歲了", "text/plain", Encoding.UTF8);
         }
-        public IActionResult CheckAccountAction(string name, int age = 28)
+        public IActionResult CheckAccountAction(string name, int age,string email)
         {
+            var members = _context.Members.Select(a => a.Name);
             if (string.IsNullOrEmpty(name))
             {
                 name = "guest";
