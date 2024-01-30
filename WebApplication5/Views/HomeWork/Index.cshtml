@@ -4,16 +4,33 @@
 @{
 }
 
+<div class="col-md-4">
+    <div class="card mb-4">
+        <img class="card-img-top" id="imgtex">
+        <div class="card-body">
+            <h5 class="card-title" id="stitle"></h5>
+            <p class="card-text" id="Xbody"></p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted" id="address"></small>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="~/js/travel.js"></script>
     <script>
-        const theUl = document.querySelector('#ull');
+        const imgte = document.querySelector('#imgtex');
+        const stitl = document.querySelector('#stitle');
+        const xbody = document.querySelector('#Xbody');
+        const addre = document.querySelector('#address');
+        const sections = spots.CommonFormat.Section;
+        const section = sections[0];
+        const shortenedXbody = section.xbody.substring(0, 100);
+        const imgText = Array.isArray(section.file.img) ? section.file.img[0].text : section.file.img.text;
+        imgte.innerHTML = imgText;
+        stitl.innerHTML = section.stitle;
+        xbody.innerHTML = shortenedXbody;
+        addre.innerHTML = section.address;
         console.log(spots.CommonFormat.Section);
-        for (i = 0; i < spots.CommonFormat.Section.length; i++) {
-            const eleLi = document.createElement("li");
-            const txtLi = document.createTextNode(spots.CommonFormat.Section[i].CAT2);
-            eleLi.appendChild(txtLi);
-            theUl.appendChild(eleLi);
-        }
     </script>
 }
