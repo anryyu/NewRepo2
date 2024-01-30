@@ -22,6 +22,10 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        public IActionResult First()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {

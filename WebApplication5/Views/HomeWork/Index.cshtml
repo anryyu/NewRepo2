@@ -3,3 +3,17 @@
 *@
 @{
 }
+
+@section Scripts {
+    <script src="~/js/travel.js"></script>
+    <script>
+        const theUl = document.querySelector('#ull');
+        console.log(spots.CommonFormat.Section);
+        for (i = 0; i < spots.CommonFormat.Section.length; i++) {
+            const eleLi = document.createElement("li");
+            const txtLi = document.createTextNode(spots.CommonFormat.Section[i].CAT2);
+            eleLi.appendChild(txtLi);
+            theUl.appendChild(eleLi);
+        }
+    </script>
+}
