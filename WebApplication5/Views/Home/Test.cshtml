@@ -7,20 +7,17 @@
 <h1>Test></h1>
 <ul></ul>
 
-@section Scripts{
+
+@section Scripts {
+    <script src="~/js/travel.js"></script>
     <script>
-        const emps = [{ "name": "Tom", "workYears": 3, "salary": 35000 },
-        { "name": "Jack", "workYears": 5, "salary": 40000 },
-        { "name": "Mary", "workYears": 7, "salary": 45000 }];
-        const emp = {
-            "employees": [
-                { "name": "Tom", "workYears": 3, "salary": 35000 },
-                { "name": "Jack", "workYears": 5, "salary": 40000 },
-                { "name": "Mary", "workYears": 7, "salary": 45000 }
-            ]
-        };
-        for (i =  0; i < emp.employees.length; i++) {
-            console.log(emp.employees[i].name + "," + emp.employees[i].workYears + "," + emp.employees[i].salary)
+        const theUl = document.querySelector('#ull');
+        console.log(spots.CommonFormat.Section);
+        for (i = 0; i < spots.CommonFormat.Section.length; i++) {
+            const eleLi = document.createElement("li");
+            const txtLi = document.createTextNode(spots.CommonFormat.Section[i].CAT2);
+            eleLi.appendChild(txtLi);
+            theUl.appendChild(eleLi);
         }
     </script>
 }
