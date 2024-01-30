@@ -14,5 +14,9 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
     }
 }
