@@ -54,9 +54,9 @@ namespace WebApplication5.Controllers
             var districts = _context.Addresses.Where(a => a.City == city).Select(a => a.SiteId).Distinct();
             return Json(districts);
         }
-        public IActionResult Road(string city, string site)
+        public IActionResult Road(string site)
         {
-            var roads = _context.Addresses.Where(a => a.City == city).Where(a => a.SiteId == site).Select(a => a.Road).Distinct();
+            var roads = _context.Addresses.Where(a => a.SiteId == site).Select(a => a.Road).Distinct();
             return Json(roads);
         }
         public IActionResult Avatar(int id = 1)
