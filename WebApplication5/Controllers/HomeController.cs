@@ -30,6 +30,14 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        public IActionResult Address()
+        {
+            return View();
+        }
+        public IActionResult Avatar()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

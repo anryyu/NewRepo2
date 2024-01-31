@@ -34,8 +34,6 @@
     <script>
         (async () => {
             const name = document.querySelector('#userName');
-            // const email = document.querySelector('#UserEmail');
-            // const age = document.querySelector('#userAge');
             const divWarning = document.querySelector("#divWarning");
             const url = `@Url.Content("~/api/checkaccountaction")?name=${name}`;
             const response = await fetch(url);
@@ -44,6 +42,19 @@
             divWarning.innerHTML = data;
 
         })();
+        const tname = document.querySelector('#userName');
+        const email = document.querySelector('#UserEmail');
+        const age = document.querySelector('#userAge');
+        const btn = document.querySelector('#button1');
+        const div1 = document.querySelector("#div1");
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const url2 = `@Url.Content("~/api/pushdata")?name=${tname.value}&email=${email.value}&age=${age.value}`;
+            const response2 = await fetch(url2);
+            const data2 = await response2.text();
+            console.log(data2);
+            div1.innerHTML = data2;
+        })
 
     </script>
 }

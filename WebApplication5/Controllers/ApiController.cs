@@ -35,11 +35,29 @@ namespace WebApplication5.Controllers
             bool IsExists = MemberCheckUserName(name);
             return IsExists ? Content("帳號已存在!", "text/plain", Encoding.UTF8) : Content("帳號可使用!", "text/plain", Encoding.UTF8);
         }
+        public IActionResult PushData(string name,string email, int age = 28)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                name = "guest";
+            }
+            return Content($"Hello {name}, {age}歲了,電子郵件是{email}.", "text/plain", Encoding.UTF8);
+        }
         public IActionResult Cities()
         {
           
             var cities = _context.Addresses.Select(a => a.City).Distinct();
             return Json(cities);
+        }
+        public IActionResult District(string city)
+        {
+            var districts = _context.Addresses.Where(a => a.City == city).Select(a => a.SiteId).Distinct();
+            return Json(districts);
+        }
+        public IActionResult Road(string city, string site)
+        {
+            var roads = _context.Addresses.Where(a => a.City == city).Where(a => a.SiteId == site).Select(a => a.Road).Distinct();
+            return Json(roads);
         }
         public IActionResult Avatar(int id = 1)
         {
