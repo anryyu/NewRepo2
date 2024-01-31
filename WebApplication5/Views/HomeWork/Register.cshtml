@@ -34,12 +34,14 @@
     <script>
         (async () => {
             const name = document.querySelector('#userName');
-            const email = document.querySelector('#UserEmail');
-            const age = document.querySelector('#userAge');
-            const url = '@Url.Content("~/api/checkaccountaction")?name=Tom&age=30&email=Tom@company.com';
+            // const email = document.querySelector('#UserEmail');
+            // const age = document.querySelector('#userAge');
+            const divWarning = document.querySelector("#divWarning");
+            const url = `@Url.Content("~/api/checkaccountaction")?name=${name}`;
             const response = await fetch(url);
             const data = await response.text();
             console.log(data);
+            divWarning.innerHTML = data;
 
         })();
 

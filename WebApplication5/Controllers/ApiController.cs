@@ -25,14 +25,15 @@ namespace WebApplication5.Controllers
             }
             return Content($"Hello {name}, {age}歲了", "text/plain", Encoding.UTF8);
         }
-        public IActionResult CheckAccountAction(string name, int age,string email)
+        private bool MemberCheckUserName(string name)
         {
-            var members = _context.Members.Select(a => a.Name);
-            if (string.IsNullOrEmpty(name))
-            {
-                name = "guest";
-            }
-            return Content($"Hello {name}, {age}歲了", "text/plain", Encoding.UTF8);
+            var Member = _context.Members.FirstOrDefault(m => m.Name == name);
+            return Member != null;
+        }
+        public IActionResult CheckAccountAction(string name)
+        {
+            bool IsExists = MemberCheckUserName(name);
+            return IsExists ? Content("帳號已存在!", "text/plain", Encoding.UTF8) : Content("帳號可使用!", "text/plain", Encoding.UTF8);
         }
         public IActionResult Cities()
         {
