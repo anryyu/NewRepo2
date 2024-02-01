@@ -67,25 +67,19 @@ namespace WebApplication5.Controllers
             return Content(uploadPath);
         }
 
-        private bool MemberCheckUserName(string name)
+        
+        public IActionResult CheckAccountAction(UserDTO _user)
         {
-            var Member = _context.Members.Where(m => m.Name == name).FirstOrDefault();
-            
-            return Member != null;
-        }
-        public async Task<IActionResult> CheckAccount(string name)
-        {
-            await _context.SaveChangesAsync();
-            if (string.IsNullOrEmpty(name))
+            string checkmsg = "";
+            if (_context.Members.FirstOrDefault(m => m.Name == _user.Name) != null)
             {
-                return Content("帳號未填寫", "text/plain", Encoding.UTF8);
+                checkmsg = "帳號已存在";
             }
-            if (_context.Members.Any(x => x.Name == name))
+            else
             {
-                return Content("True", "text/plain", Encoding.UTF8);
+                checkmsg = "帳號可使用";
             }
-            return Content("False", "text/plain", Encoding.UTF8);
-
+            return Content($"{checkmsg}");
         }
         public IActionResult PushData(string name,string email, int age = 28)
         {
