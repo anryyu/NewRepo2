@@ -38,6 +38,10 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        public IActionResult Spots()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
