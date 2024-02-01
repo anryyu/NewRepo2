@@ -18,8 +18,16 @@
                 <input type="email" class="form-control" id="UserEmail" name="Email">
             </div>
             <div class="mb-3">
+                <label for="UserPassword" class="form-label">密碼：</label>
+                <input type="password" class="form-control" id="UserPassword" name="Password">
+            </div>
+            <div class="mb-3">
                 <label for="userAge" class="form-label">年紀：</label>
                 <input type="number" class="form-control" id="userAge" name="Age">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="inputGroupFile01">頭像：</label>
+                <input type="file" class="form-control" id="inputGroupFile01" name="Avatar">
             </div>
 
             <button id="button1" type="submit" class="btn btn-primary">送出</button>
@@ -42,18 +50,23 @@
             divWarning.innerHTML = data;
 
         })();
-        const tname = document.querySelector('#userName');
-        const email = document.querySelector('#UserEmail');
-        const age = document.querySelector('#userAge');
-        const btn = document.querySelector('#button1');
-        const div1 = document.querySelector("#div1");
-        btn.addEventListener('click', async (event) => {
-            event.preventDefault();
-            const url2 = `@Url.Content("~/api/pushdata")?name=${tname.value}&email=${email.value}&age=${age.value}`;
-            const response2 = await fetch(url2);
-            const data2 = await response2.text();
-            console.log(data2);
-            div1.innerHTML = data2;
+        const btnSubmit = document.querySelector('#button1');
+        const divInfo = document.querySelector('#div1');
+
+        btnSubmit.addEventListener('click', async (event) => {
+            event.preventDefault(); //停止預設行為
+
+            //FormData
+            const formData = new FormData(document.querySelector('#userForm'));
+            const url = '@Url.Content("~/api/register")';
+            const response = await fetch(url, {
+                "method": "POST",
+                "body": formData
+            });
+            const data = await response.text();
+            divInfo.innerHTML = data;
+
+
         })
 
     </script>

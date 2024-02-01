@@ -26,7 +26,6 @@
                 <input type="file" class="form-control" id="inputGroupFile01" name="Avatar">
             </div>
 
-
             <button id="button1" type="submit" class="btn btn-primary">送出</button>
         </form>
         <div class="alert alert-info" id="div1"></div>
@@ -35,7 +34,7 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
         const btnSubmit = document.querySelector('#button1');
         // const txtName = document.querySelector('#userName');
@@ -51,8 +50,8 @@
 
             //FormData
             const formData = new FormData(document.querySelector('#userForm'));
-            formData.append("key", "123");
-            // //讀取FormData中的資料
+            // formData.append("key", "123");
+            //讀取FormData中的資料
             // for (const pair of formData.entries()) {
             //     console.log(pair[0]);
             //     console.log(pair[1]);
