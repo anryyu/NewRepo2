@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MSIT155Site.Models.DTO;
+using WebApplication5.Models.DTO;
 using NuGet.Versioning;
 using System.Text;
 using WebApplication5.Models;
@@ -69,13 +69,23 @@ namespace WebApplication5.Controllers
 
         private bool MemberCheckUserName(string name)
         {
-            var Member = _context.Members.FirstOrDefault(m => m.Name == name);
+            var Member = _context.Members.Where(m => m.Name == name).FirstOrDefault();
+            
             return Member != null;
         }
-        public IActionResult CheckAccountAction(string name)
+        public async Task<IActionResult> CheckAccount(string name)
         {
-            bool IsExists = MemberCheckUserName(name);
-            return IsExists ? Content("帳號已存在!", "text/plain", Encoding.UTF8) : Content("帳號可使用!", "text/plain", Encoding.UTF8);
+            await _context.SaveChangesAsync();
+            if (string.IsNullOrEmpty(name))
+            {
+                return Content("帳號未填寫", "text/plain", Encoding.UTF8);
+            }
+            if (_context.Members.Any(x => x.Name == name))
+            {
+                return Content("True", "text/plain", Encoding.UTF8);
+            }
+            return Content("False", "text/plain", Encoding.UTF8);
+
         }
         public IActionResult PushData(string name,string email, int age = 28)
         {
@@ -155,8 +165,18 @@ namespace WebApplication5.Controllers
             spots = spots.Skip((page - 1) * pageSize).Take(pageSize);
 
 
+            SpotsPagingDTO spotsPaging = new SpotsPagingDTO();
+            spotsPaging.TotalPages = totalPages;
+            spotsPaging.SpotsResult = spots.ToList();
 
-            return Json(spots);
+            return Json(spotsPaging);
         }
+
+        public IActionResult SpotTitle(string title)
+        {
+            var titles = _context.Spots.Where(s => s.SpotTitle.Contains(title)).Select(s => s.SpotTitle).Take(8);
+            return Json(titles);
+        }
+
     }
 }

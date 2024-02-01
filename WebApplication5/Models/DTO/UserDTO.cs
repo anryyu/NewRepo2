@@ -1,4 +1,4 @@
-﻿namespace MSIT155Site.Models.DTO
+﻿namespace WebApplication5.Models.DTO
 {
     public class UserDTO
     {

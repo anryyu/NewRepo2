@@ -41,13 +41,20 @@
 @section Scripts {
     <script>
         (async () => {
-            const name = document.querySelector('#userName');
-            const divWarning = document.querySelector("#divWarning");
-            const url = `@Url.Content("~/api/checkaccountaction")?name=${name}`;
-            const response = await fetch(url);
-            const data = await response.text();
-            console.log(data);
-            divWarning.innerHTML = data;
+
+            const name = document.getElementById('userName');
+            name.addEventListener('blur', async () => {
+
+                console.log(name);
+                const tip = `@Url.Content("~/HomeWork/CheckAccount")?name=${name.value}`;
+                const response = await fetch(tip);
+                const datas = await response.text();
+                console.log(datas);
+
+                const divWarning = document.getElementById('divWarning');
+                divWarning.innerHTML = (datas == 'True' ? '帳號已存在' : '帳號可使用');
+
+            });
 
         })();
         const btnSubmit = document.querySelector('#button1');
