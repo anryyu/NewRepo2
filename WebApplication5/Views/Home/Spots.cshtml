@@ -1,28 +1,48 @@
-﻿﻿
-@{
+﻿@{
     ViewData["Title"] = "Spots";
 }
+
 <h1>Spots</h1>
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
+    <div class="col-3">
+        <select id="pagesize" class="form-control">
+            <option value="5">每頁顯示5筆</option>
+            <option value="9" selected>每頁顯示9筆</option>
+            <option value="12">每頁顯示12筆</option>
+        </select>
+    </div>
+    <div class="col-4">
         <nav aria-label="Page navigation example">
             <ul class="pagination" id="ul1">
             </ul>
         </nav>
     </div>
+    <div class="col-2">
+        <select id="spotsort" class="form-control">
+            <option value="1" selected>景點編號升冪</option>
+            <option value="2">景點編號降冪</option>
+
+        </select>
+    </div>
     <div class="col-3">
         <input type="search" class="form-control" placeholder="景點搜尋" id="inputKeyword" />
+        <div class="list-group" id="divResult"></div>
+    </div>
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group" id="catelist">
     </div>
 </div>
-<div class="row row-cols-1 row-cols-md-3 g-4" id="div1">
-</div>
-
+<div id="div1" class="row row-cols-1 row-cols-md-3 g-4"></div>
 @section Scripts {
     <script>
-        const div1 = document.querySelector('#div1');
-        const ulPaging = document.querySelector('#ul1');
-        const inpKeyword = document.querySelector('#inputKeyword');
+        const div1 = document.getElementById('div1');
+        const ul1 = document.getElementById('ul1');
+        const pagesize = document.getElementById('pagesize');
+        const spotsort = document.getElementById('spotsort');
+        const search = document.getElementById('inputKeyword');
+        const divresult = document.getElementById('divResult');
+        const catelist = document.getElementById('catelist');
+
+
         const searchData = {
             "categoryId": 0,
             "keyword": "北投",
@@ -38,39 +58,61 @@
                 "body": JSON.stringify(searchData),
                 "headers": { "Content-Type": "application/json" }
             });
-            const datas = await response.json();
-            //console.log(datas.spotsResult);
-            //讀資料、顯示資料
-            const divSpots = datas.spotsResult.map(spot => {
+            const data = await response.json();
+            // console.log(data.spotsResult);
+
+            const divSpots = data.spotsResult.map(spot => {
                 const { spotId, spotTitle, spotImage, address, spotDescription } = spot;
-                return (`
-                                   <div class="col">
-                        <div class="card h-100">
-                            <img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
-                            <div class="card-body">
-                                      <h5 class="card-title">${spotId} - ${spotTitle}</h5>
-                                       <p class="card-text">${spotDescription.length <= 100 ? spotDescription : spotDescription.substring(0, 100)}</p>
-                            </div>
-                            <div class="card-footer">
-                                        <small class="text-body-secondary">${address}</small>
-                            </div>
-                        </div>
-                    </div>
+                return (
+                    `
+                        <div class= "col">
+                                            <div class="card h-100">
+                                                <img src="${spotImage}" class="card-img-top" alt = "...">
+                                              <div class="card-body">
+                                                         <h5 class="card-title">${spotId}-${spotTitle} </h5>
+                                                                 <p class="card-text"> ${spotDescription.length <= 100 ? spotDescription : spotDescription.substring(0, 100)}</p>
+                                              </div>
+                                                    <div class="card-footer" >
+                                                    <small class="text-body-secondary">${address} </small>
+                                                   </div>
+                                               </div>
+                                             </div>
 
-
-                        `)
+                        `
+                )
             })
 
             div1.innerHTML = divSpots.join("");
 
-            //分頁
-            // console.log(datas.totalPages);
+            const divcate = data.categoryResult.map(cateresult => {
+                const { categoryId, categoryName } = cateresult;
+                return (
+                    `
+                             <input type="radio" class="btn-check" name="btnradio" id="btnradio${categoryId}" autocomplete="off" value="${categoryId}" >
+                             <label class="btn btn-outline-primary" for="btnradio${categoryId}" >${categoryId}.${categoryName}</label>
+                        `
+                )
+            })
+
+            catelist.innerHTML = divcate.join("");
+
             let liPaging = "";
-            for (let i = 1, max = datas.totalPages; i <= max; i++) {
+            for (let i = 1; i <= data.totalPages; i++) {
                 liPaging += ` <li class="page-item" onclick="pagingHandler(${i})"><a class="page-link" href="#">${i}</a></li>`
             }
-            ulPaging.innerHTML = liPaging;
+            ul1.innerHTML = liPaging;
         };
+
+        catelist.addEventListener('change', () => {
+            let picked = document.querySelector('input[name="btnradio"]:checked').value;
+            if (searchData.categoryId != picked) {
+                searchData.categoryId = picked;
+            } else {
+                searchData.categoryId = 0;
+            }
+            //   searchData.categoryId = catelist.value;
+            loadSpots();
+        })
 
         //分頁
         const pagingHandler = page => {
@@ -78,17 +120,47 @@
             loadSpots();
         }
 
-        //關鍵字搜尋
-        inpKeyword.addEventListener('keydown', event => {
-            // console.log(event.which); //Enter => 13
-            if (event.which === 13) {
-                searchData.keyword = event.target.value;
-                searchData.page = 1;
+        pagesize.addEventListener('change', () => {
+            searchData.pageSize = pagesize.options[pagesize.selectedIndex].value;
+            loadSpots();
+        })
+
+        spotsort.addEventListener('change', () => {
+            if (spotsort.options[spotsort.selectedIndex].value == 1) {
+                searchData.sortBy = "spotId";
+                searchData.sortType = "asc";
+                loadSpots();
+            } else {
+                searchData.sortBy = "spotId";
+                searchData.sortType = "des";
                 loadSpots();
             }
         })
+
+        search.addEventListener('input', async (event) => {
+
+            //關鍵字搜尋
+            const respnse = await fetch(`@Url.Content("~/api/spottitle")?keyword=${event.target.value}`)
+            const datas = await respnse.json();
+
+            const atitles = datas.map(title => ` <a onclick="clickHandler('${title}')" href="#" class="list-group-item list-group-item-action">${title}</a>`);
+            divresult.innerHTML = atitles.join("");
+            if (event.target.value == null) {
+                return;
+            } else {
+                const load = function () {
+                    searchData.keyword = event.target.value;
+                    loadSpots();
+                }
+                setTimeout(load, 1000);
+            }
+        })
+
+        const clickHandler = title => {
+            search.value = title;
+            divResult.innerHTML = "";
+        }
+
         loadSpots();
-
-
     </script>
 }

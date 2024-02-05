@@ -46,6 +46,11 @@ namespace WebApplication5.Controllers
         {
             return View();
         }
+        public IActionResult Cors()
+        {
+            return View();
+
+        }
         public IActionResult Privacy()
         {
             return View();
